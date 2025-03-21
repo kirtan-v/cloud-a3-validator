@@ -7,11 +7,11 @@ steps:
 
   # Step 2: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/cloud-a3-454304/processor-service:latest', '.']
+    args: ['build', '-t', 'gcr.io/cloud-a3-454304/validator-service:latest', '.']
 
   # Step 3: Push the Docker image to Artifact Registry (AR)
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/cloud-a3-454304/processor-service:latest']
+    args: ['push', 'gcr.io/cloud-a3-454304/validator-service:latest']
 
   # Step 4: Configure kubectl with the GKE Cluster
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -30,15 +30,15 @@ steps:
     args:
       - 'apply'
       - '-f'
-      - 'processor-deployment.yaml'
+      - 'validator-deployment.yaml'
 
   # Force the pods to restart with the new image (using the unique tag)
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['set', 'image', 'deployment/processor-deployment', 'processor=gcr.io/cloud-a3-454304/processor-service:latest']
+    args: ['set', 'image', 'deployment/validator-deployment', 'validator=gcr.io/cloud-a3-454304/validator-service:latest']
 
 # Define images for Cloud Build
 images:
-  - 'gcr.io/cloud-a3-454304/processor-service:latest'
+  - 'gcr.io/cloud-a3-454304/validator-service:latest'
 
 options:
   env:
