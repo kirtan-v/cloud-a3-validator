@@ -19,7 +19,7 @@ steps:
       - 'container'
       - 'clusters'
       - 'get-credentials'
-      - 'cloud-a3'
+      - 'cloud-a3-temp'
       - '--zone'
       - 'us-central1-c'
       - '--project'
