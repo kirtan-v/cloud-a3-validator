@@ -1,0 +1,41 @@
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/cloud-a3-454304/validator-service:latest', '.']
+
+  # Step 2: Push the Docker image to Artifact Registry (AR)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/cloud-a3-454304/validator-service:latest']
+
+  # Step 3: Configure kubectl with the GKE Cluster
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'container'
+      - 'clusters'
+      - 'get-credentials'
+      - 'cloud-a3'
+      - '--zone'
+      - 'us-central1-c'
+      - '--project'
+      - 'cloud-a3-454304'
+
+  # Step 4: Deploy the application and service to GKE
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'validator-deployment.yaml'
+
+  # Force the pods to restart with the new image (using the unique tag)
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/validator-deployment', 'validator=gcr.io/cloud-a3-454304/validator-service:latest']
+
+# Define images for Cloud Build
+images:
+  - 'gcr.io/cloud-a3-454304/validator-service:latest'
+
+options:
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-a3'
+  logging: CLOUD_LOGGING_ONLY
