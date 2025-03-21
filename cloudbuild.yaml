@@ -19,7 +19,7 @@ steps:
       - 'container'
       - 'clusters'
       - 'get-credentials'
-      - 'cloud-a3-temp'
+      - 'cloud-a3-cluster'
       - '--zone'
       - 'us-central1-c'
       - '--project'
@@ -43,5 +43,5 @@ images:
 options:
   env:
     - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-a3-temp'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-a3-cluster'
   logging: CLOUD_LOGGING_ONLY
